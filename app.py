@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Configuration de la page
+# Configuration
 st.set_page_config(page_title="Beauty Prestige", page_icon="💎")
 
 # Style Luxe Noir et Or
@@ -16,7 +16,7 @@ st.markdown("""
 st.title("💎 BEAUTY PRESTIGE")
 st.write("Gestionnaire de Ventes Privé")
 
-# Création des onglets
+# Onglets
 tab1, tab2 = st.tabs(["🛒 Encaisser", "📦 Catalogue"])
 
 with tab1:
@@ -28,7 +28,8 @@ with tab1:
 
 with tab2:
     st.subheader("Catalogue Produits")
-    st.info("Espace de consultation des stocks.")
+    st.info("Espace de consultation bientôt disponible.")
+
 
 
 
