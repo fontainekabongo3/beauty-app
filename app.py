@@ -1,77 +1,81 @@
 import streamlit as st
 import urllib.parse
 
-# Configuration pour smartphone
-st.set_page_config(page_title="Beauty Manager Pro", page_icon="✨")
+st.set_page_config(page_title="Beauty Pro", page_icon="✨")
 
-# Design Luxe Noir et Or
+# DESIGN INSPIRÉ DE WIX (CLAIR, PROFESSIONNEL, CHIC)
 st.markdown("""
     <style>
-    .main { background-color: #000000; color: #D4AF37; }
-    .stButton>button { background-color: #D4AF37; color: black; border-radius: 15px; width: 100%; font-weight: bold; border: none; height: 3.5rem; }
-    .stSelectbox label, .stNumberInput label, .stTextInput label { color: #D4AF37 !important; font-weight: bold; }
-    h1 { color: #D4AF37; text-align: center; font-family: 'Playfair Display', serif; }
-    .stTabs [data-baseweb="tab-list"] { background-color: #000000; }
-    .stTabs [data-baseweb="tab"] { color: white; border-radius: 10px 10px 0 0; }
-    .stTabs [aria-selected="true"] { color: #D4AF37 !important; border-bottom-color: #D4AF37 !important; }
-    div[data-testid="stExpander"] { background-color: #1a1a1a; border: 1px solid #D4AF37; border-radius: 10px; }
+    /* Fond gris perle très clair */
+    .main { background-color: #FDFCFB; color: #4A4A4A; }
+    
+    /* Boutons arrondis couleur Rose Gold / Sable */
+    .stButton>button { 
+        background-color: #D4B9A8; 
+        color: white; 
+        border-radius: 25px; 
+        border: none;
+        height: 3.5rem;
+        font-weight: 300;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+    .stButton>button:hover { background-color: #C4A694; border: none; color: white; }
+
+    /* Titres élégants */
+    h1 { color: #8E735B; font-family: 'serif'; font-weight: 400; text-align: center; }
+    h3 { color: #A88B73; font-weight: 300; }
+    
+    /* Onglets modernes */
+    .stTabs [data-baseweb="tab-list"] { background-color: transparent; }
+    .stTabs [data-baseweb="tab"] { color: #9B9B9B; font-size: 16px; }
+    .stTabs [aria-selected="true"] { color: #8E735B !important; border-bottom-color: #8E735B !important; }
+    
+    /* Encadrés pour le stock et les calculs */
+    div[data-testid="stExpander"] { 
+        background-color: white; 
+        border: 1px solid #F0E6E0; 
+        border-radius: 15px; 
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("💎 BEAUTY MANAGER PRO")
-st.markdown("<p style='text-align: center; color: white;'>L'assistant des indépendantes de prestige</p>", unsafe_allow_html=True)
+st.title("✨ BEAUTY ASSISTANT")
+st.markdown("<p style='text-align: center; color: #9B9B9B; font-style: italic;'>L'élégance au service de votre gestion</p>", unsafe_allow_html=True)
 
-# Menu par onglets
-tab1, tab2, tab3 = st.tabs(["💸 Encaisser", "📦 Catalogue", "📑 Reçu Express"])
+tab1, tab2, tab3 = st.tabs(["💎 Encaissement", "📊 Calculs & Monnaie", "📩 Reçu Client"])
 
-# --- ONGLET 1 : ENCAISSEMENT ---
 with tab1:
-    st.subheader("Enregistrer une prestation")
-    metier = st.selectbox("Votre spécialité", ["Coiffure & Perruques", "Onglerie", "Optique & Regard"])
-    service = st.text_input("Nom du service (ex: Pose de perruque, Remplissage...)")
-    prix = st.number_input("Montant de la prestation (€)", min_value=0)
+    st.subheader("Nouvelle Vente")
+    col1, col2 = st.columns(2)
+    with col1:
+        service = st.selectbox("Prestation", ["Coiffure", "Ongles", "Regard", "Autre"])
+    with col2:
+        prix = st.number_input("Prix (€)", min_value=0)
     
-    if st.button("✨ VALIDER LA VENTE"):
-        st.balloons()
-        st.success(f"Vente enregistrée : {service} - {prix}€")
+    if st.button("ENREGISTRER LA PRESTATION"):
+        st.success(f"Validé avec succès : {service} ({prix}€)")
 
-# --- ONGLET 2 : CATALOGUE ---
 with tab2:
-    st.subheader("Mes Services & Tarifs")
-    
-    with st.expander("💇‍♀️ Coiffure & Perruques"):
-        st.write("- Pose classique : 50€")
-        st.write("- Customisation : 30€")
-        st.write("- Soin profond : 45€")
-        
-    with st.expander("💅 Onglerie"):
-        st.write("- Pose complète : 60€")
-        st.write("- Remplissage : 40€")
-        st.write("- Nail Art (par ongle) : 2€")
-        
-    with st.expander("👓 Optique & Regard"):
-        st.write("- Examen de vue : Offert")
-        st.write("- Pose de cils : 70€")
+    st.subheader("Calculatrice de Restitution")
+    t_du = st.number_input("Montant total à payer", min_value=0)
+    t_recu = st.number_input("Montant donné par la cliente", min_value=0)
+    if t_recu > 0:
+        reste = t_recu - t_du
+        if reste >= 0:
+            st.metric("À RENDRE :", f"{reste} €")
+        else:
+            st.error(f"Attention, il manque {-reste} €")
 
-# --- ONGLET 3 : REÇU EXPRESS ---
 with tab3:
-    st.subheader("Envoyer un justificatif")
-    st.write("Créez un message prêt à envoyer à votre cliente par SMS ou WhatsApp.")
-    
-    c_nom = st.text_input("Nom de la cliente")
-    c_service = st.text_input("Service rendu")
-    c_prix = st.number_input("Prix payé (€)", key="recu_prix")
-    
-    if st.button("📱 GÉNÉRER LE MESSAGE"):
-        message_brut = f"Bonjour {c_nom}, merci pour votre visite chez Beauty Prestige ! ✨\n\nRécapitulatif :\n- Service : {c_service}\n- Total : {c_prix}€\n\nÀ très bientôt !"
-        message_encode = urllib.parse.quote(message_brut)
-        
-        st.info("Copiez le texte ci-dessous ou cliquez sur le lien :")
-        st.code(message_brut)
-        st.markdown(f"[Envoyer via WhatsApp](https://wa.me/?text={message_encode})")
+    st.subheader("Envoyer un Reçu WhatsApp")
+    nom = st.text_input("Prénom de la cliente")
+    if st.button("GÉNÉRER LE MESSAGE PRO"):
+        msg = f"Bonjour {nom}, c'est Beauty Prestige ! ✨ Votre règlement de {prix}€ a bien été pris en compte. Merci de votre confiance."
+        link = f"https://wa.me/?text={urllib.parse.quote(msg)}"
+        st.markdown(f"[📲 Cliquer ici pour envoyer le message]({link})")
 
-st.write("---")
-st.caption("© 2026 Beauty Prestige Manager - Pour les pro de la beauté.")
 
 
 
